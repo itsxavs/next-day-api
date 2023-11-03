@@ -1,5 +1,4 @@
-import { User } from '../models/user.model';
-import { Controller, Post, Get, Body, Inject } from '@nestjs/common';
+import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { UserDto } from '../dto/user.dto';
 import { AuthService } from './auth.service';
 import { ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -15,7 +14,7 @@ export class AuthController {
   async createUser(@Body() createUserDto: UserDto) {
     return this.authService.register(createUserDto);
   }
-  @Get('/signIn')
+  @Post('/signIn')
   @ApiOperation({ summary: 'Get user' }) // Documenta la ruta
   @ApiResponse({ status: 201, description: 'loggeado' })
   async getuser(@Body() user: UserDto) {
