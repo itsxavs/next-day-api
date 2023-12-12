@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  DetailsStudent,
-  DetailsStudentModel,
-} from '../../models/detailsStudent.model';
-import { Ref } from '@typegoose/typegoose';
+import { DetailsStudentModel } from '../../models/detailsStudent.model';
 
 @Injectable()
 export class DetailsUserService {
@@ -14,8 +10,32 @@ export class DetailsUserService {
     await newDetailsStudent.save();
     return newDetailsStudent;
   }
-  async getDetailsStudent(detailsId: Ref<DetailsStudent>) {
+  async getDetailsStudent(detailsId: string) {
     const details = await DetailsStudentModel.findById(detailsId);
     return details;
+  }
+  async editDetailsStudent(detailsBody) {
+    const details = {
+      _id: detailsBody?.detailsId,
+      firstname: 'firstname',
+      pronouns: detailsBody.details.pronouns,
+      nameParents: detailsBody.details.nameParents,
+      surnameParents: detailsBody.details.surnameParents,
+      emailParents: detailsBody.details.emailParents,
+      pronounsParents: detailsBody.details.pronounsParents,
+      address: detailsBody.details.address,
+      province: detailsBody.details.province,
+      city: detailsBody.details.city,
+      phone: detailsBody.details.phone,
+      additionalInformation: detailsBody.details.additionalInformation,
+      zip: detailsBody.details.zip,
+    };
+
+    let updatedDetails = await DetailsStudentModel.findByIdAndUpdate(
+      detailsBody?.detailsId,
+      details,
+    );
+    updatedDetails.save();
+    return updatedDetails;
   }
 }

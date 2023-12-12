@@ -1,5 +1,5 @@
 import { AuthService } from './../../auth/auth.service';
-import { User } from 'src/models/user.model';
+import { User, UserModel } from 'src/models/user.model';
 import { Student, StudentModel } from './../../models/student.model';
 import { Injectable } from '@nestjs/common';
 import { Classroom } from 'src/models/interface/classroom.interface';
@@ -17,11 +17,11 @@ export class StudentService {
   }
 
   async findOne(userId: string) {
-    const foundStudent = await StudentModel.findById(userId);
-    const details = await this.detailsStudentService.getDetailsStudent(
-      foundStudent.details,
-    );
-    foundStudent.details = details;
+    const foundStudent = await StudentModel.findOne({ user: userId });
+    // const details = await this.detailsStudentService.getDetailsStudent(
+    //   foundStudent.details,
+    // );
+    // foundStudent.details = details;
     return foundStudent;
   }
 
@@ -37,6 +37,20 @@ export class StudentService {
     const student = await StudentModel.findById(studentId);
 
     return student;
+  }
+
+  async modify(student) {
+    const updatedStudent = await StudentModel.findByIdAndUpdate(
+      student.studentId,
+      student.student,
+    );
+    updatedStudent.save();
+    return updatedStudent;
+  }
+
+  async findAll() {
+    const students = await StudentModel.find().populate('user').exec();
+    return students;
   }
 
   async findByClassroom(classroom: Classroom) {}

@@ -5,6 +5,9 @@ import mongoose from 'mongoose';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  //En un futuro puedo limitar quien consume mi backend pero por ahora que me roben toda mi informacion db
+  app.enableCors();
   mongoose.connect('mongodb://localhost:27017/next-day-db');
   const config = new DocumentBuilder()
     .setTitle('API Documentation')

@@ -20,4 +20,10 @@ export class AuthController {
   async getuser(@Body() user: UserDto) {
     return this.authService.login(user);
   }
+  @Post('/modify')
+  @ApiOperation({ summary: 'Get user' }) // Documenta la ruta
+  @ApiResponse({ status: 201, description: 'loggeado' })
+  async modify(@Body() user) {
+    return this.authService.modify(user);
+  }
 }

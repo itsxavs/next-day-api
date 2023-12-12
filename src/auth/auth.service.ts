@@ -62,7 +62,16 @@ export class AuthService {
     const payload = { sub: user._id, username: user.username };
     const token = this.jwtService.sign(payload);
 
-    return user;
+    return { user, token };
+  }
+
+  async modify(user) {
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      user.userId,
+      user.user,
+    );
+    updatedUser.save();
+    return updatedUser;
   }
 
   // // Esto de que coja todo el user no me gusta, porque coge las passwords
