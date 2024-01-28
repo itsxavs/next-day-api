@@ -3,28 +3,21 @@ import { Teacher } from './teacher.models';
 import { Student } from './student.model';
 import { SUBJECT } from './enum/subject.enum';
 
-export class File {
-  @prop()
-  name: string;
-  @prop()
-  file: Buffer;
-}
-
 export class Post {
   @prop({ ref: () => Teacher })
-  teacherId: Ref<Teacher>;
+  teacher: Ref<Teacher>;
   @prop({ ref: () => Student })
-  studentId: Ref<Student>;
-
+  student: Ref<Student>;
   @prop()
   title: string;
   @prop()
   description: string;
-  @prop({ ref: () => File })
-  file: Ref<File>;
+  @prop()
+  file: string;
   @prop()
   subjects: SUBJECT;
+  @prop()
+  classroom: string;
 }
 
-export const FileModel = getModelForClass(File);
 export const PostModel = getModelForClass(Post);

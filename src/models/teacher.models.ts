@@ -10,6 +10,12 @@ export class Teacher {
   students: Ref<Student>[];
   @prop()
   classroom: Classroom[];
+  @prop()
+  name: string;
+  @prop()
+  firsname: string;
+  @prop()
+  lastname: string;
 }
 
 export const TeacherModel = getModelForClass(Teacher);

@@ -44,11 +44,20 @@ export class AuthService {
   }
 
   async login({ username, password }: User) {
-    const model = getModelForClass(User);
-    const user = await model.findOne({ username: username });
+    let resultado;
+    const user = await UserModel.findOne({ username: username });
 
-    if (!user) {
-      return null; // Usuario no encontrado
+    if (user?.role === 'TEACHER') {
+      const teacher = await this.teacherService.findOne(user.id);
+      // teacher.students.map((students)=> {
+      // students.user = await UserModel.
+      // })
+      resultado = { user, teacher };
+    } else if (user?.role === 'STUDENT') {
+      const student = await this.studentService.findOne(user.id);
+      resultado = { user, student };
+    } else {
+      return null;
     }
 
     // Verifica la contraseña
@@ -62,7 +71,7 @@ export class AuthService {
     const payload = { sub: user._id, username: user.username };
     const token = this.jwtService.sign(payload);
 
-    return { user, token };
+    return { ...resultado, token };
   }
 
   async modify(user) {

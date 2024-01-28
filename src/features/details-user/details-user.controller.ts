@@ -1,8 +1,9 @@
 import { DetailsUserService } from './details-user.service';
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('details-user')
+@ApiTags('details-students')
 export class DetailsUserController {
   constructor(private detailsUserService: DetailsUserService) {}
 

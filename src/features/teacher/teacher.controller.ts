@@ -1,5 +1,4 @@
 import { TeacherService } from 'src/features/teacher/teacher.service';
-import { Student } from './../../models/student.model';
 import { Body, Controller, Post, Inject } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { addStudentBody } from 'src/dto/addStudentsBody.dto';

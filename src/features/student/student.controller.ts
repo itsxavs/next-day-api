@@ -1,8 +1,9 @@
 import { Controller, Inject, Get, Param, Post, Body } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('students')
+@ApiTags('students')
 export class StudentController {
   constructor(
     @Inject(StudentService) private readonly studentService: StudentService,

@@ -1,21 +1,41 @@
-import { FileModel, PostModel } from './../../models/post.model';
+import { writeFile } from 'fs/promises';
+import { PostModel } from './../../models/post.model';
 import { Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PostService {
-  async savePost(post) {
-    let file = new FileModel();
-    file.name = post.name;
-    file.file = post.file;
-    await file.save();
-    let newPost = new PostModel();
-    newPost.teacherId = Object('65454e65d1a5cf4a4c5f07bc');
-    (newPost.studentId = Object(post.studentId)),
-      (newPost.description = post.description),
-      (newPost.title = post.title),
-      (newPost.file = file),
-      (newPost.subjects = post.subject);
-    await newPost.save();
+  async savePost(post, fileBuffer) {
+    // Genera un nombre de archivo único
+    const fileName = uuidv4() + '.pdf';
+    const buffer = Buffer.from(JSON.stringify(fileBuffer));
+    post = JSON.parse(post);
+    let newPosts = [];
+
+    // Guarda el archivo en el sistema de archivos
+    await writeFile('./files/' + fileName, buffer);
+    await post.students.forEach(async (studentId) => {
+      newPosts = [
+        ...newPosts,
+        await new PostModel({
+          file: './files/' + fileName,
+          teacher: post.teacherId,
+          student: studentId,
+          description: post.description,
+          title: post.title,
+          subjects: post.subjects,
+          classroom: post.classroom,
+        }).save(),
+      ];
+    });
+    return newPosts;
+  }
+
+  async getPostWithStudentAndTeacher(postId) {
+    let post = await PostModel.findById(postId)
+      .populate('student') // Reemplaza el campo 'student' por el documento correspondiente de la colección 'Student'
+      .populate('teacher'); // Reemplaza el campo 'teacher' por el documento correspondiente de la colección 'Teacher'
+    return post;
   }
 
   async getAllPostByStudent(studentId) {

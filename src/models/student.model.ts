@@ -10,7 +10,14 @@ export class Student {
   user: Ref<User>;
 
   @prop()
+  name: string;
+  @prop()
+  firsname: string;
+  @prop()
+  lastname: string;
+  @prop()
   classroom: Classroom;
+
   @prop()
   subjects: SUBJECT[];
   @prop({ ref: () => DetailsStudent })

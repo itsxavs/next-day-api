@@ -31,7 +31,7 @@ export class DetailsUserService {
       zip: detailsBody.details.zip,
     };
 
-    let updatedDetails = await DetailsStudentModel.findByIdAndUpdate(
+    const updatedDetails = await DetailsStudentModel.findByIdAndUpdate(
       detailsBody?.detailsId,
       details,
     );

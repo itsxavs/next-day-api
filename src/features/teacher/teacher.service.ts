@@ -12,7 +12,11 @@ export class TeacherService {
     await newTeacher.save();
   }
 
-  async findOne(userId: User) {}
+  async findOne(userId: string) {
+    const teacher = await TeacherModel.findOne({ user: userId });
+    teacher.students = await this.getStudents(teacher.id);
+    return teacher;
+  }
 
   async getStudents(teacherId: string) {
     const teacher = await TeacherModel.findOne({ _id: teacherId });
