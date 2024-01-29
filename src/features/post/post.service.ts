@@ -18,8 +18,8 @@ export class PostService {
       newPosts = [
         ...newPosts,
         await new PostModel({
-          file: './files/' + fileName,
-          teacher: post.teacherId,
+          file: fileBuffer,
+          teacher: post.teacher,
           student: studentId,
           description: post.description,
           title: post.title,
@@ -39,11 +39,20 @@ export class PostService {
   }
 
   async getAllPostByStudent(studentId) {
-    let posts = await PostModel.find({ studentId });
+    let posts = await PostModel.find({ student: studentId })
+      .populate('student') // Reemplaza el campo 'student' por el documento correspondiente de la colección 'Student'
+      .populate('teacher');
     return posts;
   }
   async getAllPostByTeacher(teacherId) {
-    let posts = await PostModel.find({ teacherId });
+    let posts = await PostModel.find({ teacher: teacherId })
+      .populate('student') // Reemplaza el campo 'student' por el documento correspondiente de la colección 'Student'
+      .populate('teacher');
     return posts;
+  }
+
+  async getFile(postId) {
+    let post = await PostModel.findById(postId);
+    return post.file;
   }
 }

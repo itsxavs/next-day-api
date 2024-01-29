@@ -13,7 +13,7 @@ export class Post {
   @prop()
   description: string;
   @prop()
-  file: string;
+  file: Buffer;
   @prop()
   subjects: SUBJECT;
   @prop()
