@@ -11,13 +11,25 @@ export class Post {
   @prop()
   title: string;
   @prop()
-  description: string;
+  message: string;
   @prop()
   file: Buffer;
   @prop()
-  subjects: SUBJECT;
+  fileName: string;
+  @prop()
+  subject: string;
   @prop()
   classroom: string;
+  @prop()
+  status: string;
+  @prop()
+  exerciceDone: Buffer;
+  @prop()
+  exerciceDoneName: string;
+  @prop()
+  exerciceReview: Buffer;
+  @prop()
+  exerciceReviewName: string;
 }
 
 export const PostModel = getModelForClass(Post);

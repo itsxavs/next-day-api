@@ -13,6 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import { post } from '@typegoose/typegoose';
 
 @Controller('post')
 @ApiTags('post')
@@ -26,8 +27,9 @@ export class PostController {
   async editDetailsStudent(@UploadedFiles() files, @Body() body) {
     console.log(files);
     const post = body.post;
-    const bufferFile = files[0].buffer; // Accede a bufferFile en lugar de buffer
-    return this.postService.savePost(post, bufferFile);
+    const bufferFile = files[0].buffer;
+    const filename = files[0].originalname; // Accede a bufferFile en lugar de buffer
+    return this.postService.savePost(post, bufferFile, filename);
   }
 
   @Get()
@@ -37,11 +39,29 @@ export class PostController {
     return this.postService.getAllPostByTeacher(teacherId);
   }
 
-  @Get()
+  @Get('/student')
   @ApiOperation({ summary: 'get all posts by student' })
   @ApiResponse({ status: 201, description: 'post collected' })
   async getAllPostByStudent(@Query('studentId') studentId) {
     return this.postService.getAllPostByStudent(studentId);
+  }
+  @Post('/addFiletoReview')
+  @ApiOperation({ summary: 'get all posts by student' })
+  @UseInterceptors(FilesInterceptor('bufferFile'))
+  @ApiResponse({ status: 201, description: 'post collected' })
+  async addFiletoReview(@UploadedFiles() files, @Body() body) {
+    const bufferFile = files[0].buffer;
+    const filename = files[0].originalname; // Accede a bufferFile en lugar de buffer
+    return this.postService.addFiletoReview(bufferFile, filename, body.postId);
+  }
+  @Post('/addFiletoDone')
+  @ApiOperation({ summary: 'get all posts by student' })
+  @UseInterceptors(FilesInterceptor('bufferFile'))
+  @ApiResponse({ status: 201, description: 'post collected' })
+  async addFiletoDone(@UploadedFiles() files, @Body() body) {
+    const bufferFile = files[0].buffer;
+    const filename = files[0].originalname; // Accede a bufferFile en lugar de buffer
+    return this.postService.addFiletoDone(bufferFile, filename, body.postId);
   }
 
   @Get('/file')

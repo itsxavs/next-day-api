@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PostService {
-  async savePost(post, fileBuffer) {
+  async savePost(post, fileBuffer, fileName) {
     // Genera un nombre de archivo único
-    const fileName = uuidv4() + '.pdf';
+
     const buffer = Buffer.from(JSON.stringify(fileBuffer));
     post = JSON.parse(post);
     let newPosts = [];
@@ -19,12 +19,14 @@ export class PostService {
         ...newPosts,
         await new PostModel({
           file: fileBuffer,
+          fileName: fileName,
           teacher: post.teacher,
           student: studentId,
-          description: post.description,
+          message: post.message,
           title: post.title,
-          subjects: post.subjects,
+          subject: post.subject,
           classroom: post.classroom,
+          status: 'DO',
         }).save(),
       ];
     });
@@ -49,6 +51,23 @@ export class PostService {
       .populate('student') // Reemplaza el campo 'student' por el documento correspondiente de la colección 'Student'
       .populate('teacher');
     return posts;
+  }
+
+  async addFiletoReview(fileBuffer, fileName, postId) {
+    const post = await PostModel.findById(postId);
+    post.exerciceReview = fileBuffer;
+    post.exerciceReviewName = fileName;
+    post.status = 'REVIEW';
+    await post.save();
+    return post;
+  }
+  async addFiletoDone(fileBuffer, fileName, postId) {
+    const post = await PostModel.findById(postId);
+    post.exerciceDone = fileBuffer;
+    post.exerciceDoneName = fileName;
+    post.status = 'DONE';
+    await post.save();
+    return post;
   }
 
   async getFile(postId) {
