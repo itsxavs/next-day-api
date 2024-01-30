@@ -1,5 +1,5 @@
 import { TeacherService } from 'src/features/teacher/teacher.service';
-import { Body, Controller, Post, Inject } from '@nestjs/common';
+import { Body, Controller, Post, Inject, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { addStudentBody } from 'src/dto/addStudentsBody.dto';
 
@@ -21,6 +21,13 @@ export class TeacherController {
   @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
   async getStudents(@Body() m: addStudentBody) {
     return this.teacherService.getStudents(m.teacher);
+  }
+
+  @Get('/studentByTeacher')
+  @ApiOperation({ summary: 'add students to teacher' }) // Documenta la ruta
+  @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
+  async studentByTeacher(@Query('teacherId') teacherId) {
+    return this.teacherService.getStudents(teacherId);
   }
 }
 

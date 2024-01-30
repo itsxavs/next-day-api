@@ -13,7 +13,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
-import { post } from '@typegoose/typegoose';
 
 @Controller('post')
 @ApiTags('post')

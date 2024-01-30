@@ -26,6 +26,8 @@ export class PostService {
           title: post.title,
           subject: post.subject,
           classroom: post.classroom,
+          dateStart: new Date(),
+          dateEnd: new Date(post.dateEnd),
           status: 'DO',
         }).save(),
       ];

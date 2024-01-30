@@ -30,6 +30,10 @@ export class Post {
   exerciceReview: Buffer;
   @prop()
   exerciceReviewName: string;
+  @prop()
+  dateStart: Date;
+  @prop()
+  dateEnd: Date;
 }
 
 export const PostModel = getModelForClass(Post);
