@@ -14,28 +14,50 @@ export class DetailsUserService {
     const details = await DetailsStudentModel.findById(detailsId);
     return details;
   }
-  async editDetailsStudent(detailsBody) {
+  async editDetailsStudent(detailsBody, detailsId) {
     const details = {
-      _id: detailsBody?.detailsId,
-      firstname: 'firstname',
-      pronouns: detailsBody.details.pronouns,
-      nameParents: detailsBody.details.nameParents,
-      surnameParents: detailsBody.details.surnameParents,
-      emailParents: detailsBody.details.emailParents,
-      pronounsParents: detailsBody.details.pronounsParents,
-      address: detailsBody.details.address,
-      province: detailsBody.details.province,
-      city: detailsBody.details.city,
-      phone: detailsBody.details.phone,
-      additionalInformation: detailsBody.details.additionalInformation,
-      zip: detailsBody.details.zip,
+      _id: detailsId,
+
+      pronouns: detailsBody.pronouns,
+      nameParents: detailsBody.nameParents,
+      surnameParents: detailsBody.surnameParents,
+      emailParents: detailsBody.emailParents,
+      pronounsParents: detailsBody.pronounsParents,
+      address: detailsBody.address,
+      province: detailsBody.province,
+      city: detailsBody.city,
+      phone: detailsBody.phone,
+      additionalInformation: detailsBody.additionalInformation,
+      zip: detailsBody.zip,
     };
 
     const updatedDetails = await DetailsStudentModel.findByIdAndUpdate(
-      detailsBody?.detailsId,
+      detailsId,
       details,
     );
-    updatedDetails.save();
+    await updatedDetails.save();
     return updatedDetails;
+  }
+
+  async createReviewDetails(detailsBody) {
+    const detailsStudent = await new DetailsStudentModel({
+      pronouns: detailsBody.pronouns,
+      nameParents: detailsBody.nameParents,
+      surnameParents: detailsBody.surnameParents,
+      emailParents: detailsBody.emailParents,
+      pronounsParents: detailsBody.pronounsParents,
+      address: detailsBody.address,
+      province: detailsBody.province,
+      city: detailsBody.city,
+      phone: detailsBody.phone,
+      additionalInformation: detailsBody.additionalInformation,
+      zip: detailsBody.zip,
+    });
+    detailsStudent.save();
+    return detailsStudent;
+  }
+
+  async removeReviewDetails(detailsId: string) {
+    const details = await DetailsStudentModel.findByIdAndDelete(detailsId);
   }
 }

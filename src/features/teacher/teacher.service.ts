@@ -25,6 +25,14 @@ export class TeacherService {
 
     return students;
   }
+  async getTeacher(teacherId: string) {
+    const teacher = await TeacherModel.findOne({ _id: teacherId });
+    teacher.students = await this.studentService.findSomeStudents(
+      teacher.students,
+    ); // Buscar los estudiantes basados en los ObjectId
+
+    return teacher;
+  }
 
   async addStudents(teacherId: string, students: string[]) {
     const teacher = await TeacherModel.findById(teacherId);

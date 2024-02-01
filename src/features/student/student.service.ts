@@ -1,7 +1,6 @@
 import { User } from 'src/models/user.model';
 import { Student, StudentModel } from './../../models/student.model';
 import { Injectable } from '@nestjs/common';
-import { Classroom } from 'src/models/interface/classroom.interface';
 import { DetailsUserService } from '../details-user/details-user.service';
 import { Ref } from '@typegoose/typegoose';
 
@@ -21,6 +20,12 @@ export class StudentService {
     const details = await this.detailsStudentService.getDetailsStudent(
       foundStudent.details._id.toString(),
     );
+    if (foundStudent.reviewDetails) {
+      const reviewDetails = await this.detailsStudentService.getDetailsStudent(
+        foundStudent.reviewDetails._id.toString(),
+      );
+      foundStudent.reviewDetails = reviewDetails;
+    }
     // const details = await this.detailsStudentService.getDetailsStudent(
     //   foundStudent.details,
     // );
@@ -36,6 +41,13 @@ export class StudentService {
       const details = await this.detailsStudentService.getDetailsStudent(
         student.details._id.toString(),
       );
+      if (student.reviewDetails) {
+        const reviewDetails =
+          await this.detailsStudentService.getDetailsStudent(
+            student.reviewDetails._id.toString(),
+          );
+        student.reviewDetails = reviewDetails;
+      }
       student.details = details;
     }
 
@@ -50,14 +62,20 @@ export class StudentService {
 
   async modify(student) {
     const updatedStudent = await StudentModel.findByIdAndUpdate(
-      student.studentId,
+      student._id,
       student.student,
     );
-    updatedStudent.save();
     const details = await this.detailsStudentService.getDetailsStudent(
-      updatedStudent.details.toString(),
+      updatedStudent.details._id.toString(),
     );
+    if (updatedStudent.reviewDetails) {
+      const reviewDetails = await this.detailsStudentService.getDetailsStudent(
+        updatedStudent.reviewDetails._id.toString(),
+      );
+      updatedStudent.reviewDetails = reviewDetails;
+    }
     updatedStudent.details = details;
+    await updatedStudent.save();
     return updatedStudent;
   }
 
@@ -66,5 +84,29 @@ export class StudentService {
     return students;
   }
 
-  async findByClassroom(classroom: Classroom) {}
+  async createReviewDetails(student, detailsStudent) {
+    const studentEdit = await this.modify(student);
+    const reviewDetails =
+      await this.detailsStudentService.createReviewDetails(detailsStudent);
+    if (studentEdit.reviewDetails)
+      await this.detailsStudentService.removeReviewDetails(
+        studentEdit.reviewDetails._id.toString(),
+      );
+    studentEdit.reviewDetails = reviewDetails;
+    await studentEdit.save();
+  }
+
+  async editDetailsStudent(detailsBody, detailsId, student) {
+    const studentEdit = await this.modify(student);
+    const details = await this.detailsStudentService.editDetailsStudent(
+      detailsBody,
+      detailsId,
+    );
+    await this.detailsStudentService.removeReviewDetails(detailsBody._id);
+    studentEdit.reviewDetails = null;
+    studentEdit.details = details;
+    await studentEdit.save();
+
+    return details;
+  }
 }

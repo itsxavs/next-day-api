@@ -25,6 +25,8 @@ export class DetailsStudent {
   phone: string;
   @prop()
   additionalInformation: string;
+  @prop()
+  reviewing: boolean;
 }
 
 export const DetailsStudentModel = getModelForClass(DetailsStudent);

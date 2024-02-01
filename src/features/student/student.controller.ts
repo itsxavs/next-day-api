@@ -28,4 +28,20 @@ export class StudentController {
   async getAllStudents() {
     return this.studentService.findAll();
   }
+  @Post('/createReviewDetails')
+  @ApiOperation({ summary: 'create a review details for a student' })
+  @ApiResponse({ status: 201, description: 'students' })
+  async createReviewDetails(@Body() body) {
+    return this.studentService.createReviewDetails(body.student, body.details);
+  }
+  @Post('/acceptReviewDetails')
+  @ApiOperation({ summary: 'get details of a student' }) // Documenta la ruta
+  @ApiResponse({ status: 201, description: 'data collected' })
+  async editDetailsStudent(@Body() detailsBody) {
+    return this.studentService.editDetailsStudent(
+      detailsBody.details,
+      detailsBody.student.details._id.toString(),
+      detailsBody.student,
+    );
+  }
 }

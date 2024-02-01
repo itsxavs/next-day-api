@@ -13,10 +13,10 @@ export class DetailsUserController {
   async getDetailsUser(@Param('detailsId') detailsId: string) {
     return this.detailsUserService.getDetailsStudent(detailsId);
   }
-  @Post()
-  @ApiOperation({ summary: 'get details of a student' }) // Documenta la ruta
-  @ApiResponse({ status: 201, description: 'data collected' })
-  async editDetailsStudent(@Body() detailsBody) {
-    return this.detailsUserService.editDetailsStudent(detailsBody);
-  }
+  // @Post()
+  // @ApiOperation({ summary: 'get details of a student' }) // Documenta la ruta
+  // @ApiResponse({ status: 201, description: 'data collected' })
+  // async editDetailsStudent(@Body() detailsBody) {
+  //   return this.detailsUserService.editDetailsStudent(detailsBody);
+  // }
 }

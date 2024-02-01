@@ -29,6 +29,12 @@ export class TeacherController {
   async studentByTeacher(@Query('teacherId') teacherId) {
     return this.teacherService.getStudents(teacherId);
   }
+  @Get('')
+  @ApiOperation({ summary: 'add students to teacher' }) // Documenta la ruta
+  @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
+  async getTeaacher(@Query('teacherId') teacherId) {
+    return this.teacherService.getTeacher(teacherId);
+  }
 }
 
 // Ver si metiendo solo el id aunque lo mencione como objeto sirve ya que se tiene la referencia del objeto {Object('id)} es lo mismo que
