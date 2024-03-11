@@ -33,6 +33,13 @@ export class TeacherService {
 
     return teacher;
   }
+  async getTeachers(teachers) {
+    const newTeachers = await TeacherModel.find({
+      _id: { $in: teachers },
+    }).exec();
+
+    return newTeachers;
+  }
 
   async addStudents(teacherId: string, students: string[]) {
     const teacher = await TeacherModel.findById(teacherId);

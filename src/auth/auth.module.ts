@@ -4,8 +4,8 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { User } from 'src/models/user.model';
-import { TeacherModule } from 'src/features/teacher/teacher.module';
-import { StudentModule } from 'src/features/student/student.module';
+import { StudentModule } from '../features/student/student.module';
+import { TeacherModule } from '../features/teacher/teacher.module';
 
 @Module({
   imports: [

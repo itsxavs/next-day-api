@@ -26,6 +26,7 @@ export class StudentService {
       );
       foundStudent.reviewDetails = reviewDetails;
     }
+
     // const details = await this.detailsStudentService.getDetailsStudent(
     //   foundStudent.details,
     // );
@@ -108,5 +109,14 @@ export class StudentService {
     await studentEdit.save();
 
     return details;
+  }
+  async editDetailsStudent2(detailsBody, detailsId, student) {
+    student.reviewDetails = null;
+    const studentEdit = await this.modify(student);
+    await this.detailsStudentService.removeReviewDetails(detailsBody._id);
+
+    await studentEdit.save();
+
+    return { json: 'details removed' };
   }
 }

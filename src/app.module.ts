@@ -7,6 +7,8 @@ import { DetailsStudentModel } from './models/detailsStudent.model';
 import { PostModule } from './features/post/post.module';
 import { StudentModule } from './features/student/student.module';
 import { TeacherModule } from './features/teacher/teacher.module';
+import { ChatGateway } from './features/chat-gate-way/chat.gateway';
+import { ChatGateWayModule } from './features/chat-gate-way/chat-gate-way.module';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { TeacherModule } from './features/teacher/teacher.module';
     PostModule,
     StudentModule,
     TeacherModule,
+    ChatGateWayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

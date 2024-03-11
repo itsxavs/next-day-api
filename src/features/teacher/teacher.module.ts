@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
-import { Teacher } from 'src/models/teacher.models';
+
 import { Model } from 'mongoose';
 import { TeacherController } from './teacher.controller';
 import { StudentModule } from '../student/student.module';
+import { Teacher } from '../../models/teacher.models';
 
 @Module({
   imports: [StudentModule],

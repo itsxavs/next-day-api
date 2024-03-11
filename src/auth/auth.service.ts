@@ -1,7 +1,6 @@
 import { StudentService } from './../features/student/student.service';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Ref, getModelForClass } from '@typegoose/typegoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserModel } from '../models/user.model';
 
@@ -55,6 +54,10 @@ export class AuthService {
       resultado = { user, teacher };
     } else if (user?.role === 'STUDENT') {
       const student = await this.studentService.findOne(user.id);
+      if (student.teachers.length > 0)
+        student.teachers = await this.teacherService.getTeachers(
+          student.teachers,
+        );
       resultado = { user, student };
     } else {
       return null;

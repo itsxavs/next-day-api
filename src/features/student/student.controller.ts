@@ -44,4 +44,14 @@ export class StudentController {
       detailsBody.student,
     );
   }
+  @Post('/deleteReviewDetails')
+  @ApiOperation({ summary: 'get details of a student' }) // Documenta la ruta
+  @ApiResponse({ status: 201, description: 'data collected' })
+  async deleteReview(@Body() detailsBody) {
+    return this.studentService.editDetailsStudent2(
+      detailsBody.details,
+      detailsBody.student.details._id.toString(),
+      detailsBody.student,
+    );
+  }
 }
