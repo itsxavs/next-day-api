@@ -74,6 +74,6 @@ export class PostService {
 
   async getFile(postId) {
     let post = await PostModel.findById(postId);
-    return post.file;
+    return post;
   }
 }

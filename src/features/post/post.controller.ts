@@ -68,6 +68,20 @@ export class PostController {
     const file = await this.postService.getFile(postId);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=post.pdf');
-    res.send(file);
+    res.send(file.file);
+  }
+  @Get('/fileReview')
+  async getReview(@Res() res: Response, @Query('postId') postId: string) {
+    const file = await this.postService.getFile(postId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=post.pdf');
+    res.send(file.exerciceReview);
+  }
+  @Get('/fileDone')
+  async getDone(@Res() res: Response, @Query('postId') postId: string) {
+    const file = await this.postService.getFile(postId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=post.pdf');
+    res.send(file.exerciceDone);
   }
 }
