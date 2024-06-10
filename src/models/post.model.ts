@@ -34,6 +34,14 @@ export class Post {
   dateStart: Date;
   @prop()
   dateEnd: Date;
+  @prop()
+  presentacion: number;
+  @prop()
+  organizacion: number;
+  @prop()
+  exactitud: number;
+  @prop()
+  general: number;
 }
 
 export const PostModel = getModelForClass(Post);

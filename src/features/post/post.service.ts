@@ -2,6 +2,8 @@ import { writeFile } from 'fs/promises';
 import { PostModel } from './../../models/post.model';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { pre } from '@typegoose/typegoose';
+import { StudentModel } from 'src/models/student.model';
 
 @Injectable()
 export class PostService {
@@ -75,5 +77,80 @@ export class PostService {
   async getFile(postId) {
     let post = await PostModel.findById(postId);
     return post;
+  }
+
+  async addCalificacion(postId, calificacion) {
+    const post = await PostModel.findById(postId);
+    post.presentacion = calificacion.presentacion;
+    post.organizacion = calificacion.organizacion;
+    post.exactitud = calificacion.exactitud;
+    post.general = calificacion.general;
+
+    await post.save();
+    return post;
+  }
+
+  async getReview(studentId) {
+    let posts = await PostModel.find({
+      student: studentId,
+      status: 'DONE',
+    }).select(
+      'teacher student title presentacion organizacion exactitud general',
+    );
+
+    let sumaCalificaciones = posts.reduce(
+      (calificaciones, post, i) => {
+        return {
+          presentacion:
+            Math.max(1, post?.presentacion) + calificaciones.presentacion,
+          organizacion:
+            Math.max(1, post?.organizacion) + calificaciones.organizacion,
+          exactitud: Math.max(1, post?.exactitud) + calificaciones.exactitud,
+          general: Math.max(1, post?.general) + calificaciones.general,
+          puntos: parseFloat(
+            (
+              post.presentacion +
+              post.organizacion +
+              post.exactitud +
+              post.general +
+              calificaciones.puntos
+            ).toFixed(2),
+          ),
+        };
+      },
+      {
+        presentacion: 0,
+        organizacion: 0,
+        exactitud: 0,
+        general: 0,
+        puntos: 0,
+      },
+    );
+
+    let calificacionesGeneral = {
+      presentacion: sumaCalificaciones.presentacion / Math.max(1, posts.length),
+      organizacion: sumaCalificaciones.organizacion / Math.max(1, posts.length),
+      exactitud: sumaCalificaciones.exactitud / Math.max(1, posts.length),
+      general: sumaCalificaciones.general / Math.max(1, posts.length),
+    };
+
+    const resultado = {
+      posts: posts,
+      calificacionesGeneral: calificacionesGeneral,
+      puntosPorAspecto: sumaCalificaciones,
+    };
+
+    return resultado;
+  }
+
+  async getCalificacionesAlumnos(studentsId: string[]) {
+    return Promise.all(
+      studentsId.map(async (studentId) => {
+        return {
+          student: await StudentModel.findById(studentId),
+          resultado: await this.getReview(studentId),
+        };
+      }),
+    );
   }
 }

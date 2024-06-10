@@ -24,7 +24,6 @@ export class PostController {
   @UseInterceptors(FilesInterceptor('bufferFile'))
   @ApiResponse({ status: 201, description: 'data collected' })
   async editDetailsStudent(@UploadedFiles() files, @Body() body) {
-    console.log(files);
     const post = body.post;
     const bufferFile = files[0].buffer;
     const filename = files[0].originalname; // Accede a bufferFile en lugar de buffer
@@ -83,5 +82,24 @@ export class PostController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=post.pdf');
     res.send(file.exerciceDone);
+  }
+
+  /*Añadir funcionalidad ranking*/
+
+  @Post('/calificacion/add')
+  async addCalificacion(@Body() body) {
+    this.postService.addCalificacion(body.postId, body.calificacion);
+  }
+  @Get('/calificacion/alumno')
+  async getCalificacionesAlumno(@Query('studentId') idStudent: string) {
+    let resultado = await this.postService.getReview(idStudent);
+    console.log(resultado);
+    return resultado;
+  }
+  @Post('/calificaciones/alumnos')
+  async getCalificacionesAlumnos(@Body() body) {
+    let resultados = this.postService.getCalificacionesAlumnos(body);
+
+    return resultados;
   }
 }

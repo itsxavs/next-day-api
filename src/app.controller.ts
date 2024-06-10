@@ -7,7 +7,6 @@ export class AppController {
 
   @Get('/test-database-connection')
   async testDatabase() {
-    console.log('mek');
     const isConnected = await this.appService.testDatabaseConnection();
     if (isConnected) {
       return 'Conexión exitosa a la base de datos.';
