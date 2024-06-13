@@ -9,7 +9,9 @@ async function bootstrap() {
 
   //En un futuro puedo limitar quien consume mi backend pero por ahora que me roben toda mi informacion db
   app.enableCors();
-  mongoose.connect('mongodb://localhost:27017/next-day-db');
+  mongoose.connect(
+    'mongodb+srv://javier01:javier01@cluster1.mongodb.net/next-day-db?retryWrites=true&w=majority',
+  );
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('API endpoints for your application')
