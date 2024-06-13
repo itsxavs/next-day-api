@@ -10,7 +10,7 @@ async function bootstrap() {
   //En un futuro puedo limitar quien consume mi backend pero por ahora que me roben toda mi informacion db
   app.enableCors();
   mongoose.connect(
-    'mongodb+srv://javier01:javier01@cluster1.mongodb.net/next-day-db?retryWrites=true&w=majority',
+    'mongodb+srv://javier01:javier01@cluster1.xx0vfno.mongodb.net/next-day-app?retryWrites=true&w=majority&appName=Cluster1',
   );
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
