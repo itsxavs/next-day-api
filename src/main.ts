@@ -14,7 +14,9 @@ async function bootstrap() {
       process.env.MONGODB_URI ||
         'mongodb+srv://javier01:javier01@cluster1.xx0vfno.mongodb.net/next-day-app?retryWrites=true&w=majority&appName=Cluster1',
     )
-    .then(() => console.log('Connected to MongoDB'));
+    .then((q) => {
+      console.log(`Connected to MongoDB ${q.toString()}`);
+    });
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
@@ -26,6 +28,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.useWebSocketAdapter(new IoAdapter(app));
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 3000).then((q) => {
+    console.log(`'Server is running ' ${q.toString()}`);
+  });
 }
 bootstrap();
