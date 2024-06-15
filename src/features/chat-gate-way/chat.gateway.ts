@@ -12,7 +12,10 @@ import { Server, Socket } from 'socket.io';
 @WebSocketGateway({
   namespace: '/chat',
   cors: {
-    origin: 'http://localhost:4200',
+    origin: [
+      'http://localhost:4200',
+      'http://nextdayapp.s3-website.eu-north-1.amazonaws.com',
+    ],
     methods: ['GET', 'POST'],
   },
 })
