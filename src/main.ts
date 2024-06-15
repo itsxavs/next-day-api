@@ -35,7 +35,7 @@ async function bootstrap() {
   console.log(configService.get<number>('PORT'));
   console.log(`.${process.env.NODE_ENV}.env`);
   await app
-    .listen(configService.get<number>('PORT'), '0.0.0.0')
+    .listen(configService.get<number>('PORT'))
     .then((q) => {
       console.log(`'Server is running ' ${q.toString()}`);
     })
