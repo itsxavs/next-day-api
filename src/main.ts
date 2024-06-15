@@ -4,7 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ConfigService } from '@nestjs/config';
-
+import os from 'os';
+import path from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
@@ -29,11 +30,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useWebSocketAdapter(new IoAdapter(app));
-
+  console.log('Hostname:', os.hostname());
+  console.log('Current directory:', path.resolve());
   console.log(configService.get<number>('PORT'));
   console.log(`.${process.env.NODE_ENV}.env`);
   await app
-    .listen(configService.get<number>('PORT'))
+    .listen(configService.get<number>('PORT'), '0.0.0.0')
     .then((q) => {
       console.log(`'Server is running ' ${q.toString()}`);
     })
