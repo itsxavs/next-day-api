@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import os from 'os';
 import path from 'path';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
   configService.setEnvFilePaths([`.${process.env.NODE_ENV}.env`]);
   //En un futuro puedo limitar quien consume mi backend pero por ahora que me roben toda mi informacion db
@@ -30,7 +30,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useWebSocketAdapter(new IoAdapter(app));
-
   console.log(configService.get<number>('PORT'));
   console.log(`.${process.env.NODE_ENV}.env`);
   await app
