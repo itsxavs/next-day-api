@@ -3,19 +3,21 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { IoAdapter } from '@nestjs/platform-socket.io';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  const configService = app.get(ConfigService);
+  configService.setEnvFilePaths([`.${process.env.NODE_ENV}.env`]);
   //En un futuro puedo limitar quien consume mi backend pero por ahora que me roben toda mi informacion db
   app.enableCors();
   mongoose
-    .connect(
-      process.env.MONGODB_URI ||
-        'mongodb+srv://javier01:javier01@cluster1.xx0vfno.mongodb.net/next-day-app?retryWrites=true&w=majority&appName=Cluster1',
-    )
+    .connect(configService.get<string>('MONGODB_URI'))
     .then((q) => {
       console.log(`Connected to MongoDB ${q.toString()}`);
+    })
+    .catch((err) => {
+      console.log(`Error connecting to MongoDB ${err.toString()}`);
     });
 
   const config = new DocumentBuilder()
@@ -28,8 +30,15 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.useWebSocketAdapter(new IoAdapter(app));
 
-  await app.listen(process.env.PORT || 3000).then((q) => {
-    console.log(`'Server is running ' ${q.toString()}`);
-  });
+  console.log(configService.get<number>('PORT'));
+  console.log(`.${process.env.NODE_ENV}.env`);
+  await app
+    .listen(configService.get<number>('PORT'))
+    .then((q) => {
+      console.log(`'Server is running ' ${q.toString()}`);
+    })
+    .catch((err) => {
+      console.log(`Error starting server ${err.toString()}`);
+    });
 }
 bootstrap();

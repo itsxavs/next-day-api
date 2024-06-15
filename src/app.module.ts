@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -9,10 +9,23 @@ import { StudentModule } from './features/student/student.module';
 import { TeacherModule } from './features/teacher/teacher.module';
 import { ChatGateway } from './features/chat-gate-way/chat.gateway';
 import { ChatGateWayModule } from './features/chat-gate-way/chat-gate-way.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/next-day-db'),
+    ConfigModule.forRoot({
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+      // envFilePath: `.develop.env`,
+      isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => {
+        return {
+          uri: configService.get<string>('MONGODB_URI'),
+        };
+      },
+      inject: [ConfigService],
+    }),
     AuthModule,
     DetailsStudentModel,
     PostModule,
