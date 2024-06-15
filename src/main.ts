@@ -30,8 +30,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   app.useWebSocketAdapter(new IoAdapter(app));
-  console.log('Hostname:', os.hostname());
-  console.log('Current directory:', path.resolve());
+
   console.log(configService.get<number>('PORT'));
   console.log(`.${process.env.NODE_ENV}.env`);
   await app
